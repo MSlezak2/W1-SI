@@ -2,7 +2,7 @@
 
 char name[51] = "WALL-E"; // robot's name (max. 50 characters)
 int battery_percentage = 65; // battery charge status [%] 
-float temperature = 36.61; // current temperature [*C] 
+float temperature = 309.75; // current temperature [K] 
 float velocity[3] = {1.2, 1.44444, 0.005}; // components of current velocity (in axes: x,y,z) [m/s] 
 enum status { EXPLORING, SAMPLING, RETURNING, IDLE };
 const char* status_names[] = { "EXPLORING", "SAMPLING", "RETURNING", "IDLE" };
@@ -15,12 +15,13 @@ const float MIN_TEMPERATURE = 0.0;
 const float MAX_VELOCITY = 100.0;
 const float MIN_VELOCITY = -100.0;
 
+enum temperature_units { CELSIUS, KELVIN};
+const char* temperature_units_symbols[] = { "*C", "K" };
+enum status temperature_chosen_units = KELVIN; // which units to use when displaying temperature (although it's always stored in KELVINs)
+
 int main() {
 
 	char users_choice = '0';
-	//printf("a%*sb", 10, "");
-	//printf("%s", status_names[0]);
-	//printf("%s", status_names[1]);
 
 	while (users_choice != 'x') // if user entered 'x' exit the program 
 	{
@@ -107,14 +108,27 @@ int main() {
 
 		case '3': // state TEMPERATURE 
 			system("cls");
-			printf("Current temperature is: %.1f*C\n\n", temperature);
+			
+			switch (temperature_chosen_units)
+			{
+			case CELSIUS:
+			{
+				float temperature_in_C = temperature - 273.15;
+				printf("Current temperature is: %.1f%s\n\n", temperature_in_C, temperature_units_symbols[temperature_chosen_units]);
+				break;
+			}
+			case KELVIN:
+				printf("Current temperature is: %.1f%s\n\n", temperature, temperature_units_symbols[temperature_chosen_units]);
+				break;
+			}
+			
 
-			printf("1 - BACK    2 - VARIABLE SIZE    3 - PARAMETER'S RANGE    x - EXIT\n\n");
+			printf("1 - BACK    2 - VARIABLE SIZE    3 - PARAMETER'S RANGE    4 - CHANGE UNITS    x - EXIT\n\n");
 			// user's input validation
 			do
 			{
 				scanf_s("%c", &users_choice);
-			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2' || users_choice == '3')); //TODO: find better way to do that
+			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2' || users_choice == '3' || users_choice == '4')); //TODO: find better way to do that
 
 			switch (users_choice)
 			{
@@ -137,6 +151,25 @@ int main() {
 
 				users_choice = '3'; // come back to previous state
 				break;
+			case '4': // state CHANGE UNITS
+			{
+				// It's job is to switch between available units. It does so, by incrementing the variable that holds
+				// chosen unit type (enum). When it reaches last unit, it musn't increment, but instead it should
+				// come back to the very begining of the "list".
+				int no_unit_types = sizeof(temperature_units_symbols) / sizeof(temperature_units_symbols[0]); // number of unit types
+
+				if (temperature_chosen_units < no_unit_types - 1)
+				{
+					temperature_chosen_units++; // next unit from the "list" (temperature_units enum)
+				}
+				else
+				{
+					temperature_chosen_units = 0; // back to the begining of the list
+				}
+
+				users_choice = '3'; // come back to previous state
+				break;
+			}
 			}
 
 			break;
@@ -145,12 +178,12 @@ int main() {
 			system("cls");
 			printf("Here is my current velocity [m/s]: X: %.2f    Y: %.2f    Z: %.2f\n\n", velocity[0], velocity[1], velocity[2]);
 
-			printf("1 - BACK    2 - VARIABLE SIZE    3 - PARAMETER'S RANGE    x - EXIT\n\n");
+			printf("1 - BACK    2 - VARIABLE SIZE    3 - PARAMETER'S RANGE    4 - CHANGE NOTATION    x - EXIT\n\n");
 			// user's input validation
 			do
 			{
 				scanf_s("%c", &users_choice);
-			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2' || users_choice == '3')); //TODO: find better way to do that
+			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2' || users_choice == '3' || users_choice == '4')); //TODO: find better way to do that
 
 			switch (users_choice)
 			{
@@ -173,6 +206,25 @@ int main() {
 
 				users_choice = '4'; // come back to previous state
 				break;
+			case '4': // state CHANGE NOTATION
+			{
+				// It's job is to switch between available units. It does so, by incrementing the variable that holds
+				// chosen unit type (enum). When it reaches last unit, it musn't increment, but instead it should
+				// come back to the very begining of the "list".
+				int no_unit_types = sizeof(temperature_units_symbols) / sizeof(temperature_units_symbols[0]); // number of unit types
+
+				if (temperature_chosen_units < no_unit_types - 1)
+				{
+					temperature_chosen_units++; // next unit from the "list" (temperature_units enum)
+				}
+				else
+				{
+					temperature_chosen_units = 0; // back to the begining of the list
+				}
+
+				users_choice = '3'; // come back to previous state
+				break;
+			}
 			}
 
 			break;
