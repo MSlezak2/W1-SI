@@ -19,6 +19,10 @@ enum temperature_units { CELSIUS, KELVIN};
 const char* temperature_units_symbols[] = { "*C", "K" };
 enum status temperature_chosen_units = KELVIN; // which units to use when displaying temperature (although it's always stored in KELVINs)
 
+enum notation { DECIMAL, SCIENTIFIC };
+const char* notation_specifiers[] = { "f", "e" };
+enum status chosen_notation = DECIMAL;
+
 int main() {
 
 	char users_choice = '0';
@@ -176,7 +180,12 @@ int main() {
 
 		case '4': // state VELOCITY
 			system("cls");
-			printf("Here is my current velocity [m/s]: X: %.2f    Y: %.2f    Z: %.2f\n\n", velocity[0], velocity[1], velocity[2]);
+			char message[200] = "";
+			// This command's task is to prepare "_Format" parameter for the following printf() function. It has to insert appropriate
+			// specifier (%f or %e) depending on the chosen notation (decimal or scientific).
+			sprintf_s(message, sizeof(message), "Here is my current velocity [m/s]: X: %%.2%s    Y: %%.2%s    Z: %%.2%s\n\n",
+				notation_specifiers[chosen_notation], notation_specifiers[chosen_notation], notation_specifiers[chosen_notation]);
+			printf(message, velocity[0], velocity[1], velocity[2]);
 
 			printf("1 - BACK    2 - VARIABLE SIZE    3 - PARAMETER'S RANGE    4 - CHANGE NOTATION    x - EXIT\n\n");
 			// user's input validation
@@ -208,21 +217,21 @@ int main() {
 				break;
 			case '4': // state CHANGE NOTATION
 			{
-				// It's job is to switch between available units. It does so, by incrementing the variable that holds
-				// chosen unit type (enum). When it reaches last unit, it musn't increment, but instead it should
+				// It's job is to switch between available notations. It does so, by incrementing the variable that holds
+				// chosen notation type (enum). When it reaches last unit, it musn't increment, but instead it should
 				// come back to the very begining of the "list".
-				int no_unit_types = sizeof(temperature_units_symbols) / sizeof(temperature_units_symbols[0]); // number of unit types
+				int no_notations = sizeof(notation_specifiers) / sizeof(notation_specifiers[0]); // number of notation types
 
-				if (temperature_chosen_units < no_unit_types - 1)
+				if (chosen_notation < no_notations - 1)
 				{
-					temperature_chosen_units++; // next unit from the "list" (temperature_units enum)
+					chosen_notation++; // next unit from the "list" (temperature_units enum)
 				}
 				else
 				{
-					temperature_chosen_units = 0; // back to the begining of the list
+					chosen_notation = 0; // back to the begining of the list
 				}
 
-				users_choice = '3'; // come back to previous state
+				users_choice = '4'; // come back to previous state
 				break;
 			}
 			}
