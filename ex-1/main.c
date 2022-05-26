@@ -1,8 +1,9 @@
 #include<stdio.h>
+#include <math.h>
 
 char name[51] = "WALL-E"; // robot's name (max. 50 characters)
 int battery_percentage = 65; // battery charge status [%] 
-float temperature = 309.75; // current temperature [K] 
+float temperature = 259.75; // current temperature [K] 
 float velocity[3] = {1.2, 1.44444, 0.005}; // components of current velocity (in axes: x,y,z) [m/s] 
 enum status { EXPLORING, SAMPLING, RETURNING, IDLE };
 const char* status_names[] = { "EXPLORING", "SAMPLING", "RETURNING", "IDLE" };
@@ -17,11 +18,11 @@ const float MIN_VELOCITY = -100.0;
 
 enum temperature_units { CELSIUS, KELVIN};
 const char* temperature_units_symbols[] = { "*C", "K" };
-enum status temperature_chosen_units = KELVIN; // which units to use when displaying temperature (although it's always stored in KELVINs)
+enum temperature_units temperature_chosen_units = KELVIN; // which units to use when displaying temperature (although it's always stored in KELVINs)
 
 enum notation { DECIMAL, SCIENTIFIC };
 const char* notation_specifiers[] = { "f", "e" };
-enum status chosen_notation = DECIMAL;
+enum notation chosen_notation = DECIMAL;
 
 int main() {
 
@@ -127,12 +128,13 @@ int main() {
 			}
 			
 
-			printf("1 - BACK    2 - VARIABLE SIZE    3 - PARAMETER'S RANGE    4 - CHANGE UNITS    x - EXIT\n\n");
+			printf("1 - BACK    2 - VARIABLE SIZE    3 - PARAMETER'S RANGE    4 - CHANGE UNITS    5 - ABSOLUTE VALUE    x - EXIT\n\n");
 			// user's input validation
 			do
 			{
 				scanf_s("%c", &users_choice);
-			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2' || users_choice == '3' || users_choice == '4')); //TODO: find better way to do that
+			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2' || users_choice == '3' || users_choice == '4'
+				|| users_choice == '5')); //TODO: find better way to do that
 
 			switch (users_choice)
 			{
@@ -170,6 +172,27 @@ int main() {
 				{
 					temperature_chosen_units = 0; // back to the begining of the list
 				}
+
+				users_choice = '3'; // come back to previous state
+				break;
+			}
+			case '5': // state VARIABLE SIZE
+			{
+				// take into account the unit 
+				float abs_temperature;
+				switch (temperature_chosen_units)
+				{
+				case CELSIUS:
+					abs_temperature = fabs(temperature - 273.15);
+					break;
+				case KELVIN:
+					abs_temperature = fabs(temperature);
+					break;			
+				}
+				system("cls");
+				printf("No idea what do you need that for, but here's an absolute value of the temperature: %.1f\n\n", abs_temperature);
+				printf("Press Any Key to Continue\n"); // to give the user time to read
+				getch();
 
 				users_choice = '3'; // come back to previous state
 				break;
