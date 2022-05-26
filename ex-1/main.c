@@ -1,12 +1,19 @@
 #include<stdio.h>
 
 char name[51] = "WALL-E"; // robot's name (max. 50 characters)
-int battery_percentage = 5; // battery charge status [%]
-float temperature = 36.61; // current temperature [*C] (for now)
-float velocity[3] = {1.2, 1.44444, 0.005}; // components of current velocity (in axes: x,y,z) [m/s]
+int battery_percentage = 65; // battery charge status [%] 
+float temperature = 36.61; // current temperature [*C] 
+float velocity[3] = {1.2, 1.44444, 0.005}; // components of current velocity (in axes: x,y,z) [m/s] 
 enum status { EXPLORING, SAMPLING, RETURNING, IDLE };
 const char* status_names[] = { "EXPLORING", "SAMPLING", "RETURNING", "IDLE" };
 enum status robots_status = IDLE; // current activity
+
+const int MAX_BATTERY_PERCENTAGE = 100;
+const int MIN_BATTERY_PERCENTAGE = 0;
+const float MAX_TEMPERATURE = 2000.0;
+const float MIN_TEMPERATURE = 0.0;
+const float MAX_VELOCITY = 100.0;
+const float MIN_VELOCITY = -100.0;
 
 int main() {
 
@@ -52,7 +59,7 @@ int main() {
 				break;
 			case '2': // state VARIABLE SIZE
 				system("cls");
-				printf("Number of bytes necessary to store that paramater: %i\n\n", sizeof(name));
+				printf("Number of bytes necessary to store that parameter: %i\n\n", sizeof(name));
 				printf("Press Any Key to Continue\n"); // to give the user time to read
 				getch();
 
@@ -66,12 +73,12 @@ int main() {
 			system("cls");
 			printf("My battery level is: %i%%\n\n", battery_percentage);
 
-			printf("1 - BACK    2 - VARIABLE SIZE    x - EXIT\n\n");
+			printf("1 - BACK    2 - VARIABLE SIZE    3 - PARAMETER'S RANGE    x - EXIT\n\n");
 			// user's input validation
 			do
 			{
 				scanf_s("%c", &users_choice);
-			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2')); //TODO: find better way to do that
+			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2' || users_choice == '3')); //TODO: find better way to do that
 
 			switch (users_choice)
 			{
@@ -80,7 +87,15 @@ int main() {
 				break;
 			case '2': // state VARIABLE SIZE
 				system("cls");
-				printf("Number of bytes necessary to store that paramater: %i\n\n", sizeof(battery_percentage));
+				printf("Number of bytes necessary to store that parameter: %i\n\n", sizeof(battery_percentage));
+				printf("Press Any Key to Continue\n"); // to give the user time to read
+				getch();
+
+				users_choice = '2'; // come back to previous state
+				break;
+			case '3': // state PARAMETER'S RANGE
+				system("cls");
+				printf("Possible values of that parameter: %i - %i\n\n", MIN_BATTERY_PERCENTAGE, MAX_BATTERY_PERCENTAGE);
 				printf("Press Any Key to Continue\n"); // to give the user time to read
 				getch();
 
@@ -94,12 +109,12 @@ int main() {
 			system("cls");
 			printf("Current temperature is: %.1f*C\n\n", temperature);
 
-			printf("1 - BACK    2 - VARIABLE SIZE    x - EXIT\n\n");
+			printf("1 - BACK    2 - VARIABLE SIZE    3 - PARAMETER'S RANGE    x - EXIT\n\n");
 			// user's input validation
 			do
 			{
 				scanf_s("%c", &users_choice);
-			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2')); //TODO: find better way to do that
+			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2' || users_choice == '3')); //TODO: find better way to do that
 
 			switch (users_choice)
 			{
@@ -108,7 +123,15 @@ int main() {
 				break;
 			case '2': // state VARIABLE SIZE
 				system("cls");
-				printf("Number of bytes necessary to store that paramater: %i\n\n", sizeof(temperature));
+				printf("Number of bytes necessary to store that parameter: %i\n\n", sizeof(temperature));
+				printf("Press Any Key to Continue\n"); // to give the user time to read
+				getch();
+
+				users_choice = '3'; // come back to previous state
+				break;
+			case '3': // state PARAMETER'S RANGE
+				system("cls");
+				printf("Possible values of that parameter: %.1f - %.1f\n\n", MIN_TEMPERATURE, MAX_TEMPERATURE);
 				printf("Press Any Key to Continue\n"); // to give the user time to read
 				getch();
 
@@ -122,12 +145,12 @@ int main() {
 			system("cls");
 			printf("Here is my current velocity [m/s]: X: %.2f    Y: %.2f    Z: %.2f\n\n", velocity[0], velocity[1], velocity[2]);
 
-			printf("1 - BACK    2 - VARIABLE SIZE    x - EXIT\n\n");
+			printf("1 - BACK    2 - VARIABLE SIZE    3 - PARAMETER'S RANGE    x - EXIT\n\n");
 			// user's input validation
 			do
 			{
 				scanf_s("%c", &users_choice);
-			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2')); //TODO: find better way to do that
+			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2' || users_choice == '3')); //TODO: find better way to do that
 
 			switch (users_choice)
 			{
@@ -136,7 +159,15 @@ int main() {
 				break;
 			case '2': // state VARIABLE SIZE
 				system("cls");
-				printf("Number of bytes necessary to store that paramater: %i\n\n", sizeof(velocity)); //TODO: check corectness
+				printf("Number of bytes necessary to store that parameter: %i\n\n", sizeof(velocity)); //TODO: check corectness
+				printf("Press Any Key to Continue\n"); // to give the user time to read
+				getch();
+
+				users_choice = '4'; // come back to previous state
+				break;
+			case '3': // state PARAMETER'S RANGE
+				system("cls");
+				printf("Possible values of that parameter: %.2f - %.2f\n\n", MIN_VELOCITY, MAX_VELOCITY);
 				printf("Press Any Key to Continue\n"); // to give the user time to read
 				getch();
 
@@ -164,7 +195,7 @@ int main() {
 				break;
 			case '2': // state VARIABLE SIZE
 				system("cls");
-				printf("Number of bytes necessary to store that paramater: %i\n\n", sizeof(robots_status));
+				printf("Number of bytes necessary to store that parameter: %i\n\n", sizeof(robots_status));
 				printf("Press Any Key to Continue\n"); // to give the user time to read
 				getch();
 
