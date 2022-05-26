@@ -38,50 +38,140 @@ int main() {
 			system("cls");
 			printf("As I already mentioned, my name is: %s\n\n", name);
 
-			printf("Press Any Key to Continue\n"); // to give the user time to read
-			getch();
+			printf("1 - BACK    2 - VARIABLE SIZE    x - EXIT\n\n");
+			// user's input validation
+			do
+			{
+				scanf_s("%c", &users_choice);
+			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2')); //TODO: find better way to do that
 
-			users_choice = '0'; // for program to return to main state
+			switch (users_choice)
+			{
+			case '1': // back to state MAIN
+				users_choice = '0'; // outer switch block understands '0' as MAIN (starting) state
+				break;
+			case '2': // state VARIABLE SIZE
+				system("cls");
+				printf("Number of bytes necessary to store that paramater: %i\n\n", sizeof(name));
+				printf("Press Any Key to Continue\n"); // to give the user time to read
+				getch();
+
+				users_choice = '1'; // come back to previous state
+				break;
+			}
+
 			break;
 
 		case '2': // state BATTERY CHARGE STATUS
 			system("cls");
 			printf("My battery level is: %i%%\n\n", battery_percentage);
 
-			printf("Press Any Key to Continue\n"); // to give the user time to read
-			getch();
+			printf("1 - BACK    2 - VARIABLE SIZE    x - EXIT\n\n");
+			// user's input validation
+			do
+			{
+				scanf_s("%c", &users_choice);
+			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2')); //TODO: find better way to do that
 
-			users_choice = '0'; // for program to return to main state
+			switch (users_choice)
+			{
+			case '1': // back to state MAIN
+				users_choice = '0'; // outer switch block understands '0' as MAIN (starting) state
+				break;
+			case '2': // state VARIABLE SIZE
+				system("cls");
+				printf("Number of bytes necessary to store that paramater: %i\n\n", sizeof(battery_percentage));
+				printf("Press Any Key to Continue\n"); // to give the user time to read
+				getch();
+
+				users_choice = '2'; // come back to previous state
+				break;
+			}
+
 			break;
 
 		case '3': // state TEMPERATURE 
 			system("cls");
 			printf("Current temperature is: %.1f*C\n\n", temperature);
 
-			printf("Press Any Key to Continue\n"); // to give the user time to read
-			getch();
+			printf("1 - BACK    2 - VARIABLE SIZE    x - EXIT\n\n");
+			// user's input validation
+			do
+			{
+				scanf_s("%c", &users_choice);
+			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2')); //TODO: find better way to do that
 
-			users_choice = '0'; // for program to return to main state
+			switch (users_choice)
+			{
+			case '1': // back to state MAIN
+				users_choice = '0'; // outer switch block understands '0' as MAIN (starting) state
+				break;
+			case '2': // state VARIABLE SIZE
+				system("cls");
+				printf("Number of bytes necessary to store that paramater: %i\n\n", sizeof(temperature));
+				printf("Press Any Key to Continue\n"); // to give the user time to read
+				getch();
+
+				users_choice = '3'; // come back to previous state
+				break;
+			}
+
 			break;
 
 		case '4': // state VELOCITY
 			system("cls");
 			printf("Here is my current velocity [m/s]: X: %.2f    Y: %.2f    Z: %.2f\n\n", velocity[0], velocity[1], velocity[2]);
 
-			printf("Press Any Key to Continue\n"); // to give the user time to read
-			getch();
+			printf("1 - BACK    2 - VARIABLE SIZE    x - EXIT\n\n");
+			// user's input validation
+			do
+			{
+				scanf_s("%c", &users_choice);
+			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2')); //TODO: find better way to do that
 
-			users_choice = '0'; // for program to return to main state
+			switch (users_choice)
+			{
+			case '1': // back to state MAIN
+				users_choice = '0'; // outer switch block understands '0' as MAIN (starting) state
+				break;
+			case '2': // state VARIABLE SIZE
+				system("cls");
+				printf("Number of bytes necessary to store that paramater: %i\n\n", sizeof(velocity)); //TODO: check corectness
+				printf("Press Any Key to Continue\n"); // to give the user time to read
+				getch();
+
+				users_choice = '4'; // come back to previous state
+				break;
+			}
+
 			break;
 
 		case '5': // state STATUS
 			system("cls");
 			printf("What I'm doing right now is: %s\n\n", status_names[robots_status]);
 
-			printf("Press Any Key to Continue\n"); // to give the user time to read
-			getch();
+			printf("1 - BACK    2 - VARIABLE SIZE    x - EXIT\n\n");
+			// user's input validation
+			do
+			{
+				scanf_s("%c", &users_choice);
+			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2')); //TODO: find better way to do that
 
-			users_choice = '0'; // for program to return to main state
+			switch (users_choice)
+			{
+			case '1': // back to state MAIN
+				users_choice = '0'; // outer switch block understands '0' as MAIN (starting) state
+				break;
+			case '2': // state VARIABLE SIZE
+				system("cls");
+				printf("Number of bytes necessary to store that paramater: %i\n\n", sizeof(robots_status));
+				printf("Press Any Key to Continue\n"); // to give the user time to read
+				getch();
+
+				users_choice = '5'; // come back to previous state
+				break;
+			}
+
 			break;
 		}
 
