@@ -1,5 +1,3 @@
-//TODO: Finish introducing let_user_decide function into code
-//TODO: Finish introducing LENGTH_OF macro into code
 //TODO: Extract rest of repeating code into functions
 #include<stdio.h>
 #include <math.h>
