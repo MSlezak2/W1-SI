@@ -1,5 +1,5 @@
 //TODO: Extract rest of repeating code into functions
-#include<stdio.h>
+#include <stdio.h>
 #include <math.h>
 #include <string.h>
 
