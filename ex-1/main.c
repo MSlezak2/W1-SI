@@ -1,5 +1,9 @@
+//TODO: Extract rest of repeating code into functions
 #include<stdio.h>
 #include <math.h>
+#include <string.h>
+
+#define LENGTH_OF(x) sizeof(x)/sizeof(x[0])
 
 char name[51] = "WALL-E"; // robot's name (max. 50 characters)
 int battery_percentage = 65; // battery charge status [%] 
@@ -24,6 +28,9 @@ enum notation { DECIMAL, SCIENTIFIC };
 const char* notation_specifiers[] = { "f", "e" };
 enum notation chosen_notation = DECIMAL;
 
+char let_user_decide(char* possibilities_keys[], char possibilities_values[], int no_possibilities);
+int is_choice_valid(char possibilities[], int no_posssibilities, char users_choice);
+
 int main() {
 
 	char users_choice = '0';
@@ -32,31 +39,27 @@ int main() {
 	{
 		switch (users_choice)
 		{
-		case '0': // state ASK
+		case '0': // state START
 
 			// robot introduces itself and asks which parameter to print
 			system("cls");
 			printf("Hi! I'm %s. Greetings form Mars! How can I help you?\n\n", name); //TODO: show that message only once (static)
 			printf("Which parameter do you want me to show you?\n");
-			printf("1 - NAME    2 - BATTERY CHARGE STATUS    3 - TEMPERATURE    4 - VELOCITY    5 - STATUS    x - EXIT\n\n");
-			// user's input validation
-			do
-			{
-				scanf_s("%c", &users_choice);
-			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2' || users_choice == '3' || users_choice == '4'
-				|| users_choice == '5' )); //TODO: find better way to do that
-			break; //TODO: if wrong character enter new in the same line, not in the new one like it's done now
+			char* possibilities_keys_start[] = {"NAME","BATTERY CHARGE STATUS","TEMPERATURE","VELOCITY","STATUS","EXIT"};
+			char possibilities_values_start[] = {'1','2','3','4','5','x'};
+			int no_possibilities_start = LENGTH_OF(possibilities_keys_start);
+			users_choice = let_user_decide(possibilities_keys_start, possibilities_values_start, no_possibilities_start);
+			
+			break;
 
 		case '1': // state NAME
 			system("cls");
 			printf("As I already mentioned, my name is: %s\n\n", name);
 
-			printf("1 - BACK    2 - VARIABLE SIZE    x - EXIT\n\n");
-			// user's input validation
-			do
-			{
-				scanf_s("%c", &users_choice);
-			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2')); //TODO: find better way to do that
+			char* possibilities_keys_name[] = { "BACK","VARIABLE SIZE","EXIT" };
+			char possibilities_values_name[] = { '1','2','x' };
+			int no_possibilities_name = LENGTH_OF(possibilities_keys_name);
+			users_choice = let_user_decide(possibilities_keys_name, possibilities_values_name, no_possibilities_name);
 
 			switch (users_choice)
 			{
@@ -79,13 +82,11 @@ int main() {
 			system("cls");
 			printf("My battery level is: %i%%\n\n", battery_percentage);
 
-			printf("1 - BACK    2 - VARIABLE SIZE    3 - PARAMETER'S RANGE    x - EXIT\n\n");
-			// user's input validation
-			do
-			{
-				scanf_s("%c", &users_choice);
-			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2' || users_choice == '3')); //TODO: find better way to do that
-
+			char* possibilities_keys_battery[] = { "BACK","VARIABLE SIZE","PARAMETER'S RANGE", "EXIT"};
+			char possibilities_values_battery[] = { '1','2','3','x' };
+			int no_possibilities_battery = LENGTH_OF(possibilities_keys_battery);
+			users_choice = let_user_decide(possibilities_keys_battery, possibilities_values_battery, no_possibilities_battery);
+			
 			switch (users_choice)
 			{
 			case '1': // back to state MAIN
@@ -127,14 +128,10 @@ int main() {
 				break;
 			}
 			
-
-			printf("1 - BACK    2 - VARIABLE SIZE    3 - PARAMETER'S RANGE    4 - CHANGE UNITS    5 - ABSOLUTE VALUE    x - EXIT\n\n");
-			// user's input validation
-			do
-			{
-				scanf_s("%c", &users_choice);
-			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2' || users_choice == '3' || users_choice == '4'
-				|| users_choice == '5')); //TODO: find better way to do that
+			char* possibilities_keys_temperature[] = { "BACK","VARIABLE SIZE","PARAMETER'S RANGE","CHANGE UNITS","ABSOLUTE VALUE","EXIT" };
+			char possibilities_values_temperature[] = { '1','2','3','4','5','x' };
+			int no_possibilities_temperature = LENGTH_OF(possibilities_keys_temperature);
+			users_choice = let_user_decide(possibilities_keys_temperature, possibilities_values_temperature, no_possibilities_temperature);
 
 			switch (users_choice)
 			{
@@ -162,7 +159,7 @@ int main() {
 				// It's job is to switch between available units. It does so, by incrementing the variable that holds
 				// chosen unit type (enum). When it reaches last unit, it musn't increment, but instead it should
 				// come back to the very begining of the "list".
-				int no_unit_types = sizeof(temperature_units_symbols) / sizeof(temperature_units_symbols[0]); // number of unit types
+				int no_unit_types = LENGTH_OF(temperature_units_symbols); // number of unit types
 
 				if (temperature_chosen_units < no_unit_types - 1)
 				{
@@ -210,12 +207,10 @@ int main() {
 				notation_specifiers[chosen_notation], notation_specifiers[chosen_notation], notation_specifiers[chosen_notation]);
 			printf(message, velocity[0], velocity[1], velocity[2]);
 
-			printf("1 - BACK    2 - VARIABLE SIZE    3 - PARAMETER'S RANGE    4 - CHANGE NOTATION    x - EXIT\n\n");
-			// user's input validation
-			do
-			{
-				scanf_s("%c", &users_choice);
-			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2' || users_choice == '3' || users_choice == '4')); //TODO: find better way to do that
+			char* possibilities_keys_velocity[] = { "BACK","VARIABLE SIZE","PARAMETER'S RANGE","CHANGE NOTATION","EXIT" };
+			char possibilities_values_velocity[] = { '1','2','3','4','x' };
+			int no_possibilities_velocity = LENGTH_OF(possibilities_keys_velocity);
+			users_choice = let_user_decide(possibilities_keys_velocity, possibilities_values_velocity, no_possibilities_velocity);
 
 			switch (users_choice)
 			{
@@ -243,7 +238,7 @@ int main() {
 				// It's job is to switch between available notations. It does so, by incrementing the variable that holds
 				// chosen notation type (enum). When it reaches last unit, it musn't increment, but instead it should
 				// come back to the very begining of the "list".
-				int no_notations = sizeof(notation_specifiers) / sizeof(notation_specifiers[0]); // number of notation types
+				int no_notations = LENGTH_OF(notation_specifiers); // number of notation types
 
 				if (chosen_notation < no_notations - 1)
 				{
@@ -265,12 +260,10 @@ int main() {
 			system("cls");
 			printf("What I'm doing right now is: %s\n\n", status_names[robots_status]);
 
-			printf("1 - BACK    2 - VARIABLE SIZE    x - EXIT\n\n");
-			// user's input validation
-			do
-			{
-				scanf_s("%c", &users_choice);
-			} while (!(users_choice == 'x' || users_choice == '1' || users_choice == '2')); //TODO: find better way to do that
+			char* possibilities_keys_status[] = { "BACK","VARIABLE SIZE","EXIT" };
+			char possibilities_values_status[] = { '1','2','x' };
+			int no_possibilities_status = LENGTH_OF(possibilities_keys_status);
+			users_choice = let_user_decide(possibilities_keys_status, possibilities_values_status, no_possibilities_status);
 
 			switch (users_choice)
 			{
@@ -294,4 +287,47 @@ int main() {
 
 
 	return 0;
+}
+
+char let_user_decide(char* possibilities_keys[], char possibilities_values[], int no_possibilities)
+{
+	// Function takes a map of possibilities for user to choose from. Displays the list of them, and waits for 
+	// valid user input, which it returns at last.
+
+	// display what are the possible choices
+	char choices_list[200] = "";
+	char temp[100] = "";
+
+	for (int i = 0; i < no_possibilities; i++)
+	{
+		sprintf_s(temp, sizeof(temp), "%c - %s", possibilities_values[i], possibilities_keys[i]);
+		strcat_s(choices_list, sizeof(choices_list), temp);
+		strcat_s(choices_list, sizeof(choices_list), "    ");
+	}
+	strcat_s(choices_list, 200, "\n\n");
+
+	printf("%s", choices_list);
+
+	// read user's input (wait until it's valid)
+	char users_choice;
+	do
+	{
+		scanf_s("%c", &users_choice);
+	} while (!is_choice_valid(possibilities_values, no_possibilities, users_choice));
+
+	return users_choice;
+}
+
+int is_choice_valid(char possibilities[], int no_posssibilities, char users_choice)
+{
+	int is_valid = 0;
+	for (int i = 0; i < no_posssibilities; i++)
+	{
+		if (users_choice == possibilities[i])
+		{
+			is_valid = 1;
+		}
+	}
+
+	return is_valid;
 }
