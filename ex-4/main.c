@@ -20,8 +20,8 @@ int main()
 		case '0': // state START
 			system("cls");
 			printf("Which pattern do you want to create?\n\n");
-			char* possibilities_keys[] = { "RECTANGLE","TRIANGLE","GRID","EXIT" };
-			char possibilities_values[] = { '1','2','3','x' };
+			char* possibilities_keys[] = { "RECTANGLE","TRIANGLE","GRID","FRAME","X-CROSS","EXIT" };
+			char possibilities_values[] = { '1','2','3','4','5','x' };
 			int no_possibilities = LENGTH_OF(possibilities_keys);
 			users_choice = let_user_decide(possibilities_keys, possibilities_values, no_possibilities);
 
@@ -78,6 +78,60 @@ int main()
 				for (int j = 0; j <= image_size; j++)
 				{
 					if ((i + j) % 2 == 0) // when sum of coordinates of the element is even, then put "X"
+					{
+						printf("X");
+					}
+					else // otherwise put "o"
+					{
+						printf("o");
+					}
+				}
+				printf("\n");
+			}
+
+			printf("\nPress any key to continue...");
+			getch();
+
+			users_choice = '0'; //return to the START state
+			break;
+
+		case '4': // FRAME
+
+			image_size = take_int_from_user();
+
+			printf("\n");
+			for (int i = 0; i < image_size; i++)
+			{
+				for (int j = 0; j < image_size; j++)
+				{
+					if (i == 0 || i == image_size - 1 || j == 0 || j == image_size - 1) 
+					{
+						printf("X");
+					}
+					else // otherwise put "o"
+					{
+						printf("o");
+					}
+				}
+				printf("\n");
+			}
+
+			printf("\nPress any key to continue...");
+			getch();
+
+			users_choice = '0'; //return to the START state
+			break;
+
+		case '5': // X-CROSS
+
+			image_size = take_int_from_user();
+
+			printf("\n");
+			for (int i = 0; i < image_size; i++)
+			{
+				for (int j = 0; j < image_size; j++)
+				{
+					if (i == 0 || i == image_size - 1 || j == 0 || j == image_size - 1 || i==j || i+j == image_size - 1)
 					{
 						printf("X");
 					}
