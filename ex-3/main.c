@@ -4,6 +4,7 @@
 #define LENGTH_OF(x) sizeof(x)/sizeof(x[0])
 
 const int NUMBER_OF_NOTES_IN_SUBJECT = 7;
+const int SCHOLARSHIP_TRESHOLD = 95.0; // student has to have at least 3 grades equal or greater than this treshold
 
 char* subjects[7] = { "Math", "English", "History", "Physics", "Biology", "Information Technology", "Foreign Language" };
 char* students[5]; // list of students' names
@@ -14,6 +15,7 @@ int no_students = 0; // how many students are already in the system
 float temp_score, scores_buffer = 0; // temp variables used for average score calculation (there's no point in storing that data according to the task)
 
 char give_grade(float score_percentage);
+int is_eligible(float grades[], int no_grades);
 
 int main()
 {
@@ -23,6 +25,22 @@ int main()
 	float cedric_santos[7] = { 78.2, 50.1, 58.63, 80.2, 18.4, 96.3, 96.1 };
 	float fiona_wilcher[7] = { 95.2, 99.2, 82.4, 60.77, 90.24, 97.56, 90.1};
 	*/
+
+	//students[0] = "Michal";
+	//scores[0][0] = 96.0;
+	//scores[0][1] = 96.0;
+	//scores[0][2] = 91.0;
+	//scores[0][3] = 91.0;
+	//scores[0][4] = 91.0;
+	//scores[0][5] = 91.0;
+	//scores[0][6] = 91.0;
+	//grades[0][0] = 'A';
+	//grades[0][1] = 'A';
+	//grades[0][2] = 'A';
+	//grades[0][3] = 'A';
+	//grades[0][4] = 'A';
+	//grades[0][5] = 'A';
+	//grades[0][6] = 'A';
 
 	//Enter students details
 
@@ -50,12 +68,19 @@ int main()
 
 	// Print  received grades
 
-	printf("\n\nGrades of sudent:\t%s:", &students[0]);
 	for (int i = 0; i < LENGTH_OF(subjects); i++)
 	{
 		printf("\n\n%s:\t%c", subjects[i], grades[0][i]);
 	}
 
+	if (is_eligible(scores[0],7))
+	{
+		printf("\n\nStudent is eligible for scholarship\n\n");
+	}
+	else
+	{
+		printf("\n\nStudent is not eligible for scholarship\n\n");
+	}
 
 	return 0;
 }
@@ -86,5 +111,26 @@ char give_grade(float score_percentage)
 	return grade;
 }
 
+int is_eligible(float grades[], int no_grades)
+{
+	int is_eligible = 0;
+	int no_grades_good_enough = 0;
+
+	for (int i = 0; i < no_grades; i++)
+	{
+		if (grades[i] > SCHOLARSHIP_TRESHOLD)
+		{
+			no_grades_good_enough++;
+		}
+	}
+
+	if (no_grades_good_enough >= 3)
+	{
+		is_eligible = 1;
+	}
+
+	return is_eligible;
+}
+
+
 // TODO: Validate entered percentage (0-100)
-// TODO: Problem with space in name
