@@ -1,1 +1,1 @@
-# Week 1 - SI - exercise 1 - "VARIABLES & TEXT"
+# Week 1 - SI
