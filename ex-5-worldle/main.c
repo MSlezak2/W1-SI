@@ -3,19 +3,21 @@
 #include <ctype.h>
 #include <string.h>
 
-//TODO: refactor code (extract to functions)
-//TODO: commit
-//TODO: update Excel (both of them)
-
 const char* GREEN = "[0;32m";
 const char* YELLOW = "[0;33m";
-
 const short int NO_ATTEMPTS = 7; 
 const short int MAX_NO_LETTERS = 10;
 
 char* make_up_word();
+void print_the_results(char* the_word, char* the_guess, int* attempts_p);
 char* ask_for_the_word();
 void validate_word(char* the_word);
+
+char* keep_guessing(char* the_word, int* attempts);
+
+void validate_guess(char* the_guess, char* the_word);
+
+void display_guessing_screen(char* the_word, int* attempts, char* the_guess);
 
 void read_word_incognito(char* string, int string_max_size);
 int contains_only_letters(char* s);
@@ -31,61 +33,19 @@ int main() {
 	char* the_word = make_up_word();
 
 // GUESS THE WORD PHASE
-	
-	char* the_guess = malloc(sizeof(char) * (MAX_NO_LETTERS + 1));
-
-	int attempt = 1;
-	while (strcmp(the_word, the_guess) != 0 && attempt <= NO_ATTEMPTS) {
-		// display a number of letters (***)
-		system("cls");
-		printf("The word: ");
-		print_asterisks(strlen(the_word));
-		printf("\n\n");
-
-		// keep asking until he gets that right
-		if (attempt == 1) {
-			printf("Enter your guess (%i attempts left): \n", NO_ATTEMPTS - attempt + 1);
-		} else {
-			printf("The guess: ");
-			print_colored_word(the_word, the_guess, strlen(the_guess));
-			printf("\n\n");
-			printf("You're wrong, try again (%i attempts left): \n", NO_ATTEMPTS - attempt + 1);
-		}
-
-		scanf_s("%s", the_guess, (MAX_NO_LETTERS + 1));
-		//TODO: ------------------------------------- extract to function --------------------------
-		while (!contains_only_letters(the_guess) || strlen(the_guess) != strlen(the_word) ) {
-			system("cls");
-			if (strlen(the_guess) != strlen(the_word)) {
-				printf("Given word has wrong number of letters (should be %i). \n\n", strlen(the_word));
-			} else if (!contains_only_letters(the_guess)) {
-				printf("Given word contains forbidden characters. Let's try again ()...\n\n");
-			}
-			//discard_input_buffer();
-			scanf_s("%s", the_guess, (MAX_NO_LETTERS + 1));
-		}
-		//-------------------------------------------------------------------------------------------
-
-		attempt++;
-	}
+	int attempts = 0;
+	int* attempts_p = &attempts;
+	char* the_guess = keep_guessing(the_word, attempts_p);
 
 // PRINT THE RESULTS PHASE
-
-	if (strcmp(the_word, the_guess) == 0) {
-		system("cls");
-		printf("Congratulations, you've won!!! It took you %i attempt(s) :)\n\n", attempt - 1);
-	} else {
-		system("cls");
-		printf("Better luck next time ;)\n\n");
-	}
+	print_the_results(the_word, the_guess, attempts_p);
 
 	free(the_guess);
 	free(the_word);
 
-
-
 	return 0;
 }
+
 
 
 
@@ -120,7 +80,6 @@ void validate_word(char* the_word) {
 	}
 }
 
-
 void read_word_incognito(char* string, int string_max_size) {
 	// returns empty string if word exceeds string_max_size
 	char c;
@@ -141,6 +100,54 @@ void read_word_incognito(char* string, int string_max_size) {
 		string[i] = '\0';
 	}
 	printf("\n");
+}
+
+char* keep_guessing(char* the_word, int* attempt) {
+
+	char* the_guess = malloc(sizeof(char) * (MAX_NO_LETTERS + 1));
+
+	// keep guessing until user's right or runs out of attepmts
+	while (strcmp(the_word, the_guess) != 0 && *attempt < NO_ATTEMPTS) {
+		
+		(*attempt)++;
+		display_guessing_screen(the_word, attempt, the_guess);
+
+		scanf_s("%s", the_guess, (MAX_NO_LETTERS + 1));
+		validate_guess(the_guess, the_word);
+	}
+
+	return the_guess;
+}
+
+void validate_guess(char* the_guess, char* the_word) {
+	while (!contains_only_letters(the_guess) || strlen(the_guess) != strlen(the_word)) {
+		system("cls");
+		if (strlen(the_guess) != strlen(the_word)) {
+			printf("Given word has wrong number of letters (should be %i). \n\n", strlen(the_word));
+		} else if (!contains_only_letters(the_guess)) {
+			printf("Given word contains forbidden characters. Let's try again ()...\n\n");
+		}
+		//discard_input_buffer();
+		scanf_s("%s", the_guess, (MAX_NO_LETTERS + 1));
+	}
+}
+
+void display_guessing_screen(char* the_word, int* attempt, char* the_guess) {
+	// display a number of letters (***)
+	system("cls");
+	printf("The word: ");
+	print_asterisks(strlen(the_word));
+	printf("\n\n");
+
+	// first try?
+	if (*attempt == 1) {
+		printf("Enter your guess (%i attempts left): \n", NO_ATTEMPTS - *attempt + 1);
+	} else {
+		printf("The guess: ");
+		print_colored_word(the_word, the_guess, strlen(the_guess));
+		printf("\n\n");
+		printf("You're wrong, try again (%i attempts left): \n", NO_ATTEMPTS - *attempt + 1);
+	}
 }
 
 int contains_only_letters(char* s) {
@@ -186,6 +193,16 @@ void print_colored_word(char* the_word, char* the_guess, int word_size) {
 		}
 	}
 
+}
+
+void print_the_results(char* the_word, char* the_guess, int* attempts_p) {
+	if (strcmp(the_word, the_guess) == 0) {
+		system("cls");
+		printf("Congratulations, you've won!!! It took you %i attempt(s) :)\n\n", *attempts_p);
+	} else {
+		system("cls");
+		printf("You've lost. Better luck next time ;)\n\n");
+	}
 }
 
 //void discard_input_buffer() {

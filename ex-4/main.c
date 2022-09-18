@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #define LENGTH_OF(x) sizeof(x)/sizeof(x[0])
 
@@ -20,8 +21,8 @@ int main()
 		case '0': // state START
 			system("cls");
 			printf("Which pattern do you want to create?\n\n");
-			char* possibilities_keys[] = { "RECTANGLE","TRIANGLE","GRID","FRAME","X-CROSS","EXIT" };
-			char possibilities_values[] = { '1','2','3','4','5','x' };
+			char* possibilities_keys[] = { "RECTANGLE","TRIANGLE","GRID","FRAME","X-CROSS","DIAMOND","EXIT" };
+			char possibilities_values[] = { '1','2','3','4','5','6','x' };
 			int no_possibilities = LENGTH_OF(possibilities_keys);
 			users_choice = let_user_decide(possibilities_keys, possibilities_values, no_possibilities);
 
@@ -148,6 +149,34 @@ int main()
 
 			users_choice = '0'; //return to the START state
 			break;
+
+		case '6': // DIAMOND
+
+			image_size = take_int_from_user();
+
+			printf("\n");
+			for (int i = 0; i < image_size; i++)
+			{
+				for (int j = 0; j < image_size; j++)
+				{
+					if (abs(j - round( (float)(image_size - 1) / 2.0 ) ) < i && abs(i - round((float)(image_size - 1) / 2.0) ) < j)
+					{
+						printf("X");
+					}
+					else // otherwise put "o"
+					{
+						printf("o");
+					}
+				}
+				printf("\n");
+			}
+
+			printf("\nPress any key to continue...");
+			getch();
+
+			users_choice = '0'; //return to the START state
+			break;
+
 		}
 	} while (users_choice != 'x');
 

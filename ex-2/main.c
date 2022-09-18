@@ -101,7 +101,7 @@ int main()
 			system("cls");
 			printf("You've chosen a rectangle. Now choose the way of providing some more details...\n\n");
 
-			char* possibilities_keys_rectangle[] = { "BACK","EXACT VALUES","CARTESIAN COORDINATES","EXIT" };
+			char* possibilities_keys_rectangle[] = { "WEST","EAST","NORTH","SOUTH" };
 			char possibilities_values_rectangle[] = { '1','2','3','x' };
 			int no_possibilities_rectangle = LENGTH_OF(possibilities_keys_rectangle);
 			users_choice = let_user_decide(possibilities_keys_rectangle, possibilities_values_rectangle, no_possibilities_rectangle);
